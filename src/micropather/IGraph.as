@@ -9,10 +9,10 @@ public interface IGraph
     function leastCostEstimate (stateStart :int, stateEnd :int) :Number;
 
     /**
-     * Fill outStates and outCosts with the neighbors of the given node,
+     * Fill outNeighborStates and outCosts with the neighbors of the given state,
      * and the costs to move to those neighbors.
      */
-    function adjacentCost (node :int, outStates :Vector.<int>, outCosts :Vector.<Number>) :void;
+    function adjacentCost (state :int, outNeighborStates :Vector.<int>, outCosts :Vector.<Number>) :void;
 }
 
 };
