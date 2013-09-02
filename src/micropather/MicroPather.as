@@ -19,7 +19,7 @@ public class MicroPather
         _pathNodePool = null;
     }
 
-    public function solve (startState :int, endState :int, outPath :Vector.<int> = null) :int {
+    public function solve (startState :int, endState :int, outPath :Vector.<int>) :int {
         _pathNodePool = new Dictionary();
 
         if (startState == endState) {
@@ -98,7 +98,7 @@ public class MicroPather
         return NO_SOLUTION;
     }
 
-    internal function goalReached (node :PathNode, start :int, end :int, path :Vector.<int> = null) :Vector.<int> {
+    internal function goalReached (node :PathNode, start :int, end :int, outPath :Vector.<int>) :void {
         // We have reached the goal.
         // How long is the path? Used to allocate the vector which is returned.
         var count :int = 1;
@@ -108,23 +108,17 @@ public class MicroPather
             it = it.parent;
         }
 
-        if (path == null) {
-            path = new Vector.<int>(count);
-        } else {
-            path.length = count;
-        }
-        path[0] = start;
-        path[count-1] = end;
+        outPath.length = count;
+        outPath[0] = start;
+        outPath[count-1] = end;
         count -= 2;
 
         it = node.parent;
         while (it.parent) {
-            path[count] = it.state;
+            outPath[count] = it.state;
             it = it.parent;
             --count;
         }
-
-        return path;
     }
 
     internal function getNodeNeighbors (node :PathNode, costs :Vector.<Number>, pathNodes :Vector.<PathNode>) :void {
