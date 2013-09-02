@@ -1,0 +1,4 @@
+#
+# Set this to the location of your flex sdk install dir
+
+flexsdk.dir =
