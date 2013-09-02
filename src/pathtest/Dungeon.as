@@ -169,8 +169,8 @@ package pathtest {
 
             if ( passable == 1 ) {
 
-                var solution:Vector.<int> = pather.solve( Encode( playerX, playerY ),
-                                                        Encode( x, y ) );
+                var solution :Vector.<int> = new Vector.<int>();
+                pather.solve( Encode( playerX, playerY ), Encode( x, y ), solution );
                 trace( "Solution length=", solution.length );
 
                 path.graphics.clear();

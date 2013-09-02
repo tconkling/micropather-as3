@@ -2,6 +2,7 @@
 // aciv
 
 package pathtest {
+
 import flash.utils.Dictionary;
 
 public class MicroPather
@@ -19,63 +20,55 @@ public class MicroPather
         _pathNodePool = new Dictionary();
     }
 
-    public function solve (startState :int, endState :int) :Vector.<int> {
-        //trace( "Solve" );
+    public function solve (startState :int, endState :int, outPath :Vector.<int> = null) :int {
         _pathNodePool = new Dictionary();
-        var cost:Number = 0.0;
-        var path:Vector.<int> = new Vector.<int>();
 
-        if ( startState == endState )
-            return path;
+        if (startState == endState) {
+            return START_END_SAME;
+        }
 
         ++_frame;
-        var open:Vector.<PathNode> = new Vector.<PathNode>();
+        var open :Vector.<PathNode> = new Vector.<PathNode>();
 
-        var newPathNode:PathNode = new PathNode(     _frame,
-                                                    startState,                                        // node
-                                                    0,                                                // cost from start
-                                                    _graph.leastCostEstimate( startState, endState ),
-                                                    null );
-        open.push( newPathNode );
+        var newPathNode :PathNode = new PathNode(_frame, startState, 0,
+            _graph.leastCostEstimate(startState, endState), null);
+        open.push(newPathNode);
 
-        while ( open.length )
-        {
+        while (open.length > 0) {
             var node:PathNode = open.pop();
             //trace( "pop", node.state, "totalCostest", node.totalCost );
 
-            if ( node.state == endState )
-            {
+            if (node.state == endState) {
                 //trace( "Goal reached." );
-                return goalReached( node, startState, endState );
-            }
-            else
-            {
+                goalReached(node, startState, endState, outPath);
+                return SOLVED;
+
+            } else {
                 // We have not reached the goal - add the neighbors.
-                var costs:Vector.<Number> = new Vector.<Number>();
-                var neighbors:Vector.<PathNode> = new Vector.<PathNode>();
+                var costs :Vector.<Number> = new Vector.<Number>();
+                var neighbors :Vector.<PathNode> = new Vector.<PathNode>();
 
-                getNodeNeighbors( node, costs, neighbors );
+                getNodeNeighbors(node, costs, neighbors);
 
-                for( var i:int=0; i<neighbors.length; ++i )
-                {
-                    if ( costs[i] == Number.MAX_VALUE ) {
+                for (var ii :int = 0; ii < neighbors.length; ++ii) {
+                    if ( costs[ii] == Number.MAX_VALUE ) {
                         continue;
                     }
 
-                    var newCost:Number = node.costFromStart + costs[i];
+                    var newCost:Number = node.costFromStart + costs[ii];
 
-                    var inOpen:PathNode   = neighbors[i].inOpen ? neighbors[i] : null;
-                    var inClosed:PathNode = neighbors[i].inClosed ? neighbors[i] : null;
+                    var inOpen:PathNode   = neighbors[ii].inOpen ? neighbors[ii] : null;
+                    var inClosed:PathNode = neighbors[ii].inClosed ? neighbors[ii] : null;
                     var inEither:PathNode = inOpen ? inOpen : inClosed;
 
                     //trace( "neighbor", neighbors[i].state, "inOpen", inOpen, "inClosed", inClosed );
 
-                    if ( inEither )
-                    {
+                    if (inEither) {
                         // Is this node is in use, and the cost is not an improvement,
                         // continue on.
-                        if ( inEither.costFromStart <= newCost )
+                        if (inEither.costFromStart <= newCost) {
                             continue;    // Do nothing. This path is not better than existing.
+                        }
 
                         // Groovy. We have new information or improved information.
                         inEither.parent = node;
@@ -83,52 +76,51 @@ public class MicroPather
                         inEither.estToGoal = _graph.leastCostEstimate( inEither.state, endState );
                     }
 
-                    if ( inClosed )
-                    {
+                    if (inClosed) {
                         // now open
                         inClosed.inClosed = false;
                         inClosed.inOpen = true;
-                        open.push( inClosed );
+                        open.push(inClosed);
                     }
-                    if (!inEither)
-                    {
-                        var pNode:PathNode = neighbors[i];
+
+                    if (!inEither) {
+                        var pNode :PathNode = neighbors[ii];
                         pNode.parent = node;
                         pNode.costFromStart = newCost;
-                        pNode.estToGoal = _graph.leastCostEstimate( pNode.state, endState ),
-                        pNode.inOpen = true;
+                        pNode.estToGoal = _graph.leastCostEstimate(pNode.state, endState),
+                            pNode.inOpen = true;
                         open.push( pNode );
                     }
                 }
-                open.sort( compareTotalCost );
-
-                //trace( "Open set" );
-                for( var j:int=0; j<open.length; ++j ) {
-                    //-( "  ", open[j].state );
-                }
+                open.sort(compareTotalCost);
             }
             node.inClosed = true;
         }
-        return path;
+
+        return NO_SOLUTION;
     }
 
-    internal function goalReached (node :PathNode, start :int, end :int) :Vector.<int> {
+    internal function goalReached (node :PathNode, start :int, end :int, path :Vector.<int> = null) :Vector.<int> {
         // We have reached the goal.
         // How long is the path? Used to allocate the vector which is returned.
-        var count:int = 1;
-        var it:PathNode = node;
-        while( it.parent )
-        {
+        var count :int = 1;
+        var it :PathNode = node;
+        while (it.parent) {
             ++count;
             it = it.parent;
         }
-        var path:Vector.<int> = new Vector.<int>(count);
+
+        if (path == null) {
+            path = new Vector.<int>(count);
+        } else {
+            path.length = count;
+        }
         path[0] = start;
         path[count-1] = end;
         count -= 2;
 
         it = node.parent;
-        while( it.parent ) {
+        while (it.parent) {
             path[count] = it.state;
             it = it.parent;
             --count;
@@ -138,16 +130,16 @@ public class MicroPather
     }
 
     internal function getNodeNeighbors (node :PathNode, costs :Vector.<Number>, pathNodes :Vector.<PathNode>) :void {
-        var states:Vector.<int> = new Vector.<int>();
-        _graph.adjacentCost( node.state, states, costs );
+        var states :Vector.<int> = new Vector.<int>();
+        _graph.adjacentCost(node.state, states, costs);
 
-        for( var i:int=0; i<states.length; ++i ) {
-            if ( states[i] in _pathNodePool ) {
-                pathNodes[i] = _pathNodePool[ states[i] ];
+        for (var ii:int=0; ii<states.length; ++ii) {
+            if (states[ii] in _pathNodePool) {
+                pathNodes[ii] = _pathNodePool[states[ii]];
             } else {
-                var pn:PathNode = new PathNode( _frame, states[i], Number.MAX_VALUE, Number.MAX_VALUE, null );
-                _pathNodePool[ states[i] ] = pn;
-                pathNodes[i] = pn;
+                var pn :PathNode = new PathNode(_frame, states[ii], Number.MAX_VALUE, Number.MAX_VALUE, null);
+                _pathNodePool[states[ii]] = pn;
+                pathNodes[ii] = pn;
             }
         }
     }
@@ -163,8 +155,8 @@ public class MicroPather
         }
     }
 
+    protected var _frame :int;
     protected var _graph :IGraph;
-    protected var _frame :int;                        // incremented with every solve, used to determine
 
     private var _pathNodePool :Dictionary;
 }
