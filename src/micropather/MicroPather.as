@@ -7,10 +7,6 @@ import flash.utils.Dictionary;
 
 public class MicroPather
 {
-    public const SOLVED :int = 0;
-    public const NO_SOLUTION :int = 1;
-    public const START_END_SAME :int = 2;
-
     public function MicroPather (graph :IGraph) {
         _graph = graph;
     }
@@ -19,7 +15,7 @@ public class MicroPather
         _pathNodePool = null;
     }
 
-    public function solve (startState :int, endState :int, outPath :Vector.<int>) :int {
+    public function solve (startState :int, endState :int, outPath :Vector.<int> = null) :PathResult {
         _pathNodePool = new Dictionary();
 
         if (startState == endState) {
@@ -38,8 +34,7 @@ public class MicroPather
 
             if (node.state == endState) {
                 //trace( "Goal reached." );
-                goalReached(node, startState, endState, outPath);
-                return SOLVED;
+                return PathResult.solved(goalReached(node, startState, endState, outPath));
 
             } else {
                 // We have not reached the goal - add the neighbors.
@@ -98,7 +93,7 @@ public class MicroPather
         return NO_SOLUTION;
     }
 
-    internal function goalReached (node :PathNode, start :int, end :int, outPath :Vector.<int>) :void {
+    protected function goalReached (node :PathNode, start :int, end :int, outPath :Vector.<int> = null) :Vector.<int> {
         // We have reached the goal.
         // How long is the path? Used to allocate the vector which is returned.
         var count :int = 1;
@@ -108,7 +103,12 @@ public class MicroPather
             it = it.parent;
         }
 
-        outPath.length = count;
+        if (outPath == null) {
+            outPath = new Vector.<int>(count);
+        } else {
+            outPath.length = count;
+        }
+
         outPath[0] = start;
         outPath[count-1] = end;
         count -= 2;
@@ -119,9 +119,11 @@ public class MicroPather
             it = it.parent;
             --count;
         }
+
+        return outPath;
     }
 
-    internal function getNodeNeighbors (node :PathNode, costs :Vector.<Number>, pathNodes :Vector.<PathNode>) :void {
+    protected function getNodeNeighbors (node :PathNode, costs :Vector.<Number>, pathNodes :Vector.<PathNode>) :void {
         var states :Vector.<int> = new Vector.<int>();
         _graph.adjacentCost(node.state, states, costs);
 
@@ -136,7 +138,7 @@ public class MicroPather
         }
     }
 
-    internal function compareTotalCost (x :PathNode, y :PathNode) :Number {
+    protected function compareTotalCost (x :PathNode, y :PathNode) :Number {
         // lower cost sorts to the end
         if (x.totalCost < y.totalCost) {
             return 1;
@@ -149,5 +151,8 @@ public class MicroPather
 
     protected var _graph :IGraph;
     protected var _pathNodePool :Dictionary;
+
+    protected static const NO_SOLUTION :PathResult = PathResult.noSolution();
+    protected static const START_END_SAME :PathResult = PathResult.startEndSame();
 }
 };
