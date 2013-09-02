@@ -24,6 +24,7 @@ distribution.
 */
 
 package pathtest {
+
     import flash.display.Sprite;
     import flash.events.Event;
     import flash.events.MouseEvent;
@@ -31,7 +32,8 @@ package pathtest {
     import flash.geom.Point;
     import flash.system.System;
     import flash.text.TextField;
-
+    import micropather.IGraph;
+    import micropather.MicroPather;
 
     public class Dungeon extends Sprite implements IGraph {
 

@@ -1,7 +1,7 @@
 //
 // aciv
 
-package pathtest {
+package micropather {
 
 internal class PathNode
 {

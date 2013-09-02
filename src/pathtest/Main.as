@@ -6,9 +6,9 @@ package pathtest {
 import flash.display.Sprite;
 import flash.events.Event;
 
-public class test extends Sprite
+public class Main extends Sprite
 {
-    public function test () {
+    public function Main () {
         addChild(new Dungeon());
     }
 }
