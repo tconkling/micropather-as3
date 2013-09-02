@@ -2,6 +2,7 @@
 // aciv
 
 package pathtest {
+import flash.utils.Dictionary;
 
 public class MicroPather
 {
@@ -11,16 +12,16 @@ public class MicroPather
 
     public function MicroPather (graph :IGraph) {
         _graph = graph;
-        _pathNodePool = new Object();
+        _pathNodePool = new Dictionary();
     }
 
     public function reset () :void {
-        _pathNodePool = new Object();
+        _pathNodePool = new Dictionary();
     }
 
     public function solve (startState :int, endState :int) :Vector.<int> {
         //trace( "Solve" );
-        _pathNodePool = new Object();
+        _pathNodePool = new Dictionary();
         var cost:Number = 0.0;
         var path:Vector.<int> = new Vector.<int>();
 
@@ -165,6 +166,6 @@ public class MicroPather
     protected var _graph :IGraph;
     protected var _frame :int;                        // incremented with every solve, used to determine
 
-    private var _pathNodePool :Object;
+    private var _pathNodePool :Dictionary;
 }
 };
