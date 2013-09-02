@@ -13,11 +13,10 @@ public class MicroPather
 
     public function MicroPather (graph :IGraph) {
         _graph = graph;
-        _pathNodePool = new Dictionary();
     }
 
     public function reset () :void {
-        _pathNodePool = new Dictionary();
+        _pathNodePool = null;
     }
 
     public function solve (startState :int, endState :int, outPath :Vector.<int> = null) :int {
@@ -27,10 +26,9 @@ public class MicroPather
             return START_END_SAME;
         }
 
-        ++_frame;
         var open :Vector.<PathNode> = new Vector.<PathNode>();
 
-        var newPathNode :PathNode = new PathNode(_frame, startState, 0,
+        var newPathNode :PathNode = new PathNode(startState, 0,
             _graph.leastCostEstimate(startState, endState), null);
         open.push(newPathNode);
 
@@ -137,7 +135,7 @@ public class MicroPather
             if (states[ii] in _pathNodePool) {
                 pathNodes[ii] = _pathNodePool[states[ii]];
             } else {
-                var pn :PathNode = new PathNode(_frame, states[ii], Number.MAX_VALUE, Number.MAX_VALUE, null);
+                var pn :PathNode = new PathNode(states[ii], Number.MAX_VALUE, Number.MAX_VALUE, null);
                 _pathNodePool[states[ii]] = pn;
                 pathNodes[ii] = pn;
             }
@@ -155,9 +153,7 @@ public class MicroPather
         }
     }
 
-    protected var _frame :int;
     protected var _graph :IGraph;
-
-    private var _pathNodePool :Dictionary;
+    protected var _pathNodePool :Dictionary;
 }
 };
