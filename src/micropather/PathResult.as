@@ -9,6 +9,7 @@ public class PathResult
     public static const NO_SOLUTION :int = 1;
     public static const START_END_SAME :int = 2;
 
+    public function get success () :Boolean { return _result == SOLVED; }
     public function get result () :int { return _result; }
     public function get path () :Vector.<Object> { return _path; }
 
