@@ -11,10 +11,6 @@ public class MicroPather
         _graph = graph;
     }
 
-    public function reset () :void {
-        _pathNodePool = null;
-    }
-
     public function solve (startState :Object, endState :Object, outPath :Vector.<Object> = null) :PathResult {
         if (startState == endState) {
             return START_END_SAME;
@@ -26,10 +22,8 @@ public class MicroPather
         var result :PathResult = null;
         while (OPEN.length > 0) {
             var node:PathNode = OPEN.pop();
-            //trace( "pop", node.state, "totalCostest", node.totalCost );
 
             if (node.state == endState) {
-                //trace( "Goal reached." );
                 result = PathResult.solved(goalReached(node, startState, endState, outPath));
                 break;
 
@@ -47,8 +41,6 @@ public class MicroPather
                     var inOpen:PathNode   = NEIGHBORS[ii].inOpen ? NEIGHBORS[ii] : null;
                     var inClosed:PathNode = NEIGHBORS[ii].inClosed ? NEIGHBORS[ii] : null;
                     var inEither:PathNode = inOpen ? inOpen : inClosed;
-
-                    //trace( "neighbor", neighbors[i].state, "inOpen", inOpen, "inClosed", inClosed );
 
                     if (inEither) {
                         // Is this node is in use, and the cost is not an improvement,
@@ -79,16 +71,21 @@ public class MicroPather
                         OPEN.push( pNode );
                     }
                 }
+
                 node.inClosed = true;
 
                 OPEN.sort(compareTotalCost);
+
+                // cleanup loop temporaries
                 COSTS.length = 0;
                 NEIGHBORS.length = 0;
             }
 
         }   // while (OPEN.length > 0)
 
+        // cleanup function temporaries
         OPEN.length = 0;
+        _pathNodePool = null;
 
         return (result || NO_SOLUTION);
     }
