@@ -10,9 +10,9 @@ public class PathResult
     public static const START_END_SAME :int = 2;
 
     public function get result () :int { return _result; }
-    public function get path () :Vector.<int> { return _path; }
+    public function get path () :Vector.<Object> { return _path; }
 
-    internal static function solved (path :Vector.<int>) :PathResult {
+    internal static function solved (path :Vector.<Object>) :PathResult {
         var out :PathResult = new PathResult();
         out._result = SOLVED;
         out._path = path;
@@ -32,6 +32,6 @@ public class PathResult
     }
 
     private var _result :int;
-    private var _path :Vector.<int>;
+    private var _path :Vector.<Object>;
 }
 }

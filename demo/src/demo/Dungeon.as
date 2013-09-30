@@ -79,7 +79,7 @@ public class Dungeon extends Sprite implements IGraph {
 
         for( var j:int=0; j<MAPY; ++j ) {
             for( var i:int=0; i<MAPX; ++i ) {
-                var index:int = Encode( i, j );
+                var index:int = Index( i, j );
                 children[index] = new Sprite();
                 this.addChild( children[index] );
                 //dstates.push( new DState( i, j ) );
@@ -100,10 +100,10 @@ public class Dungeon extends Sprite implements IGraph {
         Draw();
     }
 
-//    public function Index( x:int, y:int ):int
-//    {
-//        return y*MAPX + x;
-//    }
+    public function Index( x:int, y:int ):int
+    {
+        return y*MAPX + x;
+    }
 
     public function Draw():void {
         for( var j:int=0; j<MAPY; ++j ) {
@@ -135,7 +135,8 @@ public class Dungeon extends Sprite implements IGraph {
         return y*MAPX+x;
     }
 
-    public function Decode( state:int ):Point {
+    public function Decode( s:Object ):Point {
+        var state :int = int(s);
         var y:int = state / MAPX;
         var x:int = state - y*MAPX;
         return new Point( x, y );
@@ -171,7 +172,7 @@ public class Dungeon extends Sprite implements IGraph {
 
         if ( passable == 1 ) {
 
-            var solution :Vector.<int> = new Vector.<int>();
+            var solution :Vector.<Object> = new Vector.<Object>();
             pather.solve( Encode( playerX, playerY ), Encode( x, y ), solution );
             trace( "Solution length=", solution.length );
 
@@ -216,7 +217,7 @@ public class Dungeon extends Sprite implements IGraph {
         return 0;
     }
 
-    public function leastCostEstimate( stateStart:int, stateEnd:int ):Number
+    public function leastCostEstimate( stateStart:Object, stateEnd:Object ):Number
     {
         var d0:Point = Decode( stateStart );
         var d1:Point = Decode( stateEnd );
@@ -226,7 +227,7 @@ public class Dungeon extends Sprite implements IGraph {
         return Math.sqrt( dx*dx + dy*dy );
     }
 
-    public function adjacentCost( node:int, states:Vector.<int>, costs:Vector.<Number> ):void
+    public function adjacentCost( node:Object, states:Vector.<Object>, costs:Vector.<Number> ):void
     {
         var dx:Array = [ 1, 1, 0, -1, -1, -1, 0, 1 ];
         var dy:Array = [ 0, 1, 1, 1, 0, -1, -1, -1 ];

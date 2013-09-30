@@ -5,7 +5,7 @@ package micropather {
 
 internal class PathNode
 {
-    public var state :int;               // the client state
+    public var state :Object;            // the client state
     public var costFromStart :Number;    // exact
     public var estToGoal :Number;        // estimated
     public var parent :PathNode;         // the parent is used to reconstruct the path
@@ -15,7 +15,7 @@ internal class PathNode
     public var inOpen :Boolean;
     public var inClosed :Boolean;
 
-    public function PathNode (state :int, costFromStart :Number, estToGoal :Number,
+    public function PathNode (state :Object, costFromStart :Number, estToGoal :Number,
         parent :PathNode) {
         this.state = state;
         this.costFromStart = costFromStart;
