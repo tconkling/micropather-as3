@@ -137,15 +137,11 @@ public class MicroPather
         STATES.length = 0;
     }
 
-    protected function compareTotalCost (x :PathNode, y :PathNode) :Number {
+    protected static function compareTotalCost (a :PathNode, b :PathNode) :int {
         // lower cost sorts to the end
-        if (x.totalCost < y.totalCost) {
-            return 1;
-        } else if (x.totalCost > y.totalCost) {
-            return -1;
-        } else {
-            return 0;
-        }
+        var aCost :Number = a.totalCost;
+        var bCost :Number = b.totalCost;
+        return (aCost > bCost ? -1 : (aCost == bCost ? 0 : 1));
     }
 
     protected var _graph :IGraph;
