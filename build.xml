@@ -9,7 +9,7 @@
 
   <target name="-prepare" depends="-init-ooo">
     <mkdir dir="${deploy.dir}"/>
-    <maventaskdef groupId="com.threerings.ant" artifactId="actionscript" version="1.6"/>
+    <maventaskdef groupId="com.threerings.ant" artifactId="actionscript" version="1.8"/>
   </target>
 
   <target name="clean" description="Removes all generated files and directories">
