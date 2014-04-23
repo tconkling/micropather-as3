@@ -11,8 +11,8 @@ public class PathResult
 
     /** An int representing the type of result this is */
     public function get resultType () :int { return _resultType; }
-    /** The Vector of nodes that make up the path, if the pathfinding was successful */
-    public function get path () :Vector.<Object> { return _path; }
+    /** The Array of nodes that make up the path, if the pathfinding was successful */
+    public function get path () :Array { return _path; }
 
     /** True if this PathResult contains a successful path */
     public function get isSolution () :Boolean { return _resultType == SOLVED; }
@@ -22,7 +22,7 @@ public class PathResult
     /** The last node in the path */
     public function get end () :* { return _path[_path.length - 1]; }
 
-    internal static function solved (path :Vector.<Object>) :PathResult {
+    internal static function solved (path :Array) :PathResult {
         var out :PathResult = new PathResult();
         out._resultType = SOLVED;
         out._path = path;
@@ -42,6 +42,6 @@ public class PathResult
     }
 
     private var _resultType :int;
-    private var _path :Vector.<Object>;
+    private var _path :Array;
 }
 }

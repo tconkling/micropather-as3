@@ -172,7 +172,7 @@ public class Dungeon extends Sprite implements IGraph {
 
         if ( passable == 1 ) {
 
-            var solution :Vector.<Object> = new Vector.<Object>();
+            var solution :Array = [];
             pather.solve( Encode( playerX, playerY ), Encode( x, y ), solution );
             trace( "Solution length=", solution.length );
 

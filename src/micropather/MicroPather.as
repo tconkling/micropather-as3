@@ -11,7 +11,7 @@ public class MicroPather
         _graph = graph;
     }
 
-    public function solve (startState :Object, endState :Object, outPath :Vector.<Object> = null) :PathResult {
+    public function solve (startState :Object, endState :Object, outPath :Array = null) :PathResult {
         if (startState == endState) {
             return START_END_SAME;
         }
@@ -90,7 +90,7 @@ public class MicroPather
         return (result || NO_SOLUTION);
     }
 
-    protected function goalReached (node :PathNode, start :Object, end :Object, outPath :Vector.<Object> = null) :Vector.<Object> {
+    protected function goalReached (node :PathNode, start :Object, end :Object, outPath :Array = null) :Array {
         // We have reached the goal.
         // How long is the path? Used to allocate the vector which is returned.
         var count :int = 1;
@@ -101,7 +101,7 @@ public class MicroPather
         }
 
         if (outPath == null) {
-            outPath = new Vector.<Object>(count);
+            outPath = new Array(count);
         } else {
             outPath.length = count;
         }
