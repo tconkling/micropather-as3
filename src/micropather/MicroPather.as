@@ -21,7 +21,7 @@ public class MicroPather
         OPEN.push(new PathNode(startState, 0, _graph.leastCostEstimate(startState, endState), null));
         var result :PathResult = null;
         while (OPEN.length > 0) {
-            var node:PathNode = OPEN.pop();
+            var node :PathNode = OPEN.pop();
 
             if (node.state == endState) {
                 result = PathResult.solved(goalReached(node, startState, endState, outPath));
@@ -31,16 +31,16 @@ public class MicroPather
                 // We have not reached the goal - add the neighbors.
                 getNodeNeighbors(node, COSTS, NEIGHBORS);
 
-                for (var ii :int = 0; ii < NEIGHBORS.length; ++ii) {
+                for (var ii :int = 0, n :int = NEIGHBORS.length; ii < n; ++ii) {
                     if (COSTS[ii] == Number.MAX_VALUE) {
                         continue;
                     }
 
-                    var newCost:Number = node.costFromStart + COSTS[ii];
+                    var newCost :Number = node.costFromStart + COSTS[ii];
 
-                    var inOpen:PathNode   = NEIGHBORS[ii].inOpen ? NEIGHBORS[ii] : null;
-                    var inClosed:PathNode = NEIGHBORS[ii].inClosed ? NEIGHBORS[ii] : null;
-                    var inEither:PathNode = inOpen ? inOpen : inClosed;
+                    var inOpen :PathNode   = NEIGHBORS[ii].inOpen ? NEIGHBORS[ii] : null;
+                    var inClosed :PathNode = NEIGHBORS[ii].inClosed ? NEIGHBORS[ii] : null;
+                    var inEither :PathNode = inOpen ? inOpen : inClosed;
 
                     if (inEither) {
                         // Is this node is in use, and the cost is not an improvement,
@@ -52,14 +52,14 @@ public class MicroPather
                         // Groovy. We have new information or improved information.
                         inEither.parent = node;
                         inEither.costFromStart = newCost;
-                        inEither.estToGoal = _graph.leastCostEstimate( inEither.state, endState );
+                        inEither.estToGoal = _graph.leastCostEstimate(inEither.state, endState);
                     }
 
                     if (inClosed) {
                         // now open
                         inClosed.inClosed = false;
                         inClosed.inOpen = true;
-                        OPEN.push(inClosed);
+                        OPEN[OPEN.length] = inClosed;
                     }
 
                     if (!inEither) {
@@ -68,7 +68,7 @@ public class MicroPather
                         pNode.costFromStart = newCost;
                         pNode.estToGoal = _graph.leastCostEstimate(pNode.state, endState);
                         pNode.inOpen = true;
-                        OPEN.push( pNode );
+                        OPEN[OPEN.length] = pNode;
                     }
                 }
 
@@ -123,7 +123,7 @@ public class MicroPather
     protected function getNodeNeighbors (node :PathNode, costs :Vector.<Number>, pathNodes :Vector.<PathNode>) :void {
         _graph.adjacentCost(node.state, STATES, costs);
 
-        for (var ii:int=0; ii<STATES.length; ++ii) {
+        for (var ii :int = 0, n :int = STATES.length; ii < n; ++ii) {
             if (STATES[ii] in _pathNodePool) {
                 pathNodes[ii] = _pathNodePool[STATES[ii]];
             } else {
