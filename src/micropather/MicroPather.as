@@ -66,8 +66,8 @@ public class MicroPather
                         var pNode :PathNode = NEIGHBORS[ii];
                         pNode.parent = node;
                         pNode.costFromStart = newCost;
-                        pNode.estToGoal = _graph.leastCostEstimate(pNode.state, endState),
-                            pNode.inOpen = true;
+                        pNode.estToGoal = _graph.leastCostEstimate(pNode.state, endState);
+                        pNode.inOpen = true;
                         OPEN.push( pNode );
                     }
                 }
@@ -156,4 +156,4 @@ public class MicroPather
     protected static const NO_SOLUTION :PathResult = PathResult.noSolution();
     protected static const START_END_SAME :PathResult = PathResult.startEndSame();
 }
-};
+}
