@@ -5,12 +5,12 @@ package micropather {
 
 public class PathResult
 {
-    public static const SOLVED :int = 0;
-    public static const NO_SOLUTION :int = 1;
-    public static const START_END_SAME :int = 2;
+    public static const SOLVED :String = "solved";
+    public static const NO_SOLUTION :String = "noSolution";
+    public static const START_END_SAME :String = "startEndSame";
 
-    /** An int representing the type of result this is */
-    public function get resultType () :int { return _resultType; }
+    public function get resultType () :String { return _resultType; }
+
     /** The Array of nodes that make up the path, if the pathfinding was successful */
     public function get path () :Array { return _path; }
 
@@ -41,7 +41,7 @@ public class PathResult
         return out;
     }
 
-    private var _resultType :int;
+    private var _resultType :String;
     private var _path :Array;
 }
 }
