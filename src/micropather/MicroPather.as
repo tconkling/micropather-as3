@@ -13,7 +13,7 @@ public class MicroPather
 
     public function solve (startState :Object, endState :Object, outPath :Array = null) :PathResult {
         if (startState == endState) {
-            return START_END_SAME;
+            return PathResult.START_END_SAME;
         }
 
         _pathNodePool = new Dictionary();
@@ -87,7 +87,7 @@ public class MicroPather
         OPEN.length = 0;
         _pathNodePool = null;
 
-        return (result || NO_SOLUTION);
+        return (result || PathResult.NO_SOLUTION);
     }
 
     protected function goalReached (node :PathNode, start :Object, end :Object, outPath :Array = null) :Array {
@@ -152,8 +152,5 @@ public class MicroPather
     protected static const COSTS :Vector.<Number> = new <Number>[];
     protected static const NEIGHBORS :Vector.<PathNode> = new <PathNode>[];
     protected static const OPEN :Vector.<PathNode> = new <PathNode>[];
-
-    protected static const NO_SOLUTION :PathResult = PathResult.noSolution();
-    protected static const START_END_SAME :PathResult = PathResult.startEndSame();
 }
 }
