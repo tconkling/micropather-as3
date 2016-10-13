@@ -19,7 +19,7 @@ public class PathResult
     /** The last node in the path */
     public function get end () :* { return _path[_path.length - 1]; }
 
-    internal static function solved (path :Array) :PathResult {
+    public static function solved (path :Array) :PathResult {
         var out :PathResult = new PathResult();
         out._path = path;
         return out;
