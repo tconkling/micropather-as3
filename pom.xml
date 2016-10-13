@@ -5,7 +5,7 @@
   <groupId>com.timconkling</groupId>
   <artifactId>micropather</artifactId>
   <packaging>swc</packaging>
-  <version>1.0</version>
+  <version>1.0.1</version>
 
   <repositories/>
   <dependencies/>
